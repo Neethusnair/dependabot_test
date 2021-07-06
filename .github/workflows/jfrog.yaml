@@ -51,4 +51,3 @@ jobs:
 #           'buildName'      : buildInfo.name,
 #           'buildNumber'    : buildInfo.number,
 #         ]
-    echo 'output ' + buildInfo.number
