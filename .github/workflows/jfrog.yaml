@@ -34,7 +34,8 @@ jobs:
     # Build the Docker image
     - name: Build docker image
       run: |-
-        buildInfo = Artifactory.newBuildInfo()
+        def buildInfo = Artifactory.newBuildInfo()
+        #buildInfo = Artifactory.newBuildInfo()
         buildInfo.env.capture = true
         scanConfig = [
           'buildName'      : buildInfo.name,
