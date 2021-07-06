@@ -1,9 +1,10 @@
 name: "Create Image"
 
 on:
-  pull_request:
+  #pull_request:
+  push:
     branches:
-      - main
+      - Neethusnair-patch-1
       
 jobs:
   setup-build-publish-deploy:
@@ -20,6 +21,12 @@ jobs:
         JFROG_USER: ${{ secrets.JFROG_USER }}
         JFROG_PASSWORD: ${{ secrets.JFROG_PASSWORD }}
       run: |
+          #buildInfo = Artifactory.newBuildInfo()
+          #buildInfo.env.capture = true
+          #scanConfig = [
+          #  'buildName'      : buildInfo.name,
+          #  'buildNumber'    : buildInfo.number,
+          #]
           docker login sreyo.jfrog.io -u $JFROG_USER -p $JFROG_PASSWORD
           #kubectl create secret generic jfrog-secret --from-file=.dockerconfigjson=.docker/config.json  --type=kubernetes.io/dockerconfigjson
           #kubectl create secret generic jfrog-secret --from-file=.dockerconfigjson=/home/runner/.docker/config.json  --type=kubernetes.io/dockerconfigjson
@@ -27,7 +34,21 @@ jobs:
     # Build the Docker image
     - name: Build docker image
       run: |-
+        def buildInfo = Artifactory.newBuildInfo()
+        #buildInfo = Artifactory.newBuildInfo()
+        buildInfo.env.capture = true
+        scanConfig = [
+          'buildName'      : buildInfo.name,
+          'buildNumber'    : buildInfo.number,
+        ]
         docker build ./authentication  -t  sreyo.jfrog.io/ns-docker-dev-local/login-docker:latest
         docker build ./welcome -t  sreyo.jfrog.io/ns-docker-dev-local/list-docker
         docker push sreyo.jfrog.io/ns-docker-dev-local/login-docker
-        docker push sreyo.jfrog.io/ns-docker-dev-local/list-docker  
+        docker push sreyo.jfrog.io/ns-docker-dev-local/list-docker 
+        echo 'output ' + buildInfo.number
+#         buildInfo = Artifactory.newBuildInfo()
+#         buildInfo.env.capture = true
+#         scanConfig = [
+#           'buildName'      : buildInfo.name,
+#           'buildNumber'    : buildInfo.number,
+#         ]
