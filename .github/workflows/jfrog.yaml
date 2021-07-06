@@ -1,9 +1,10 @@
 name: "Create Image"
 
 on:
-  pull_request:
+  #pull_request:
+  push:
     branches:
-      - main
+      - Neethusnair-patch-1
       
 jobs:
   setup-build-publish-deploy:
