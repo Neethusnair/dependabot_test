@@ -31,3 +31,4 @@ jobs:
         docker build ./welcome -t  sreyo.jfrog.io/ns-docker-dev-local/list-docker
         docker push sreyo.jfrog.io/ns-docker-dev-local/login-docker
         docker push sreyo.jfrog.io/ns-docker-dev-local/list-docker  
+        docker image history sreyo.jfrog.io/ns-docker-dev-local/login-docker
