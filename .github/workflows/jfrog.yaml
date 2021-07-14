@@ -33,16 +33,17 @@ jobs:
       run: |-
         docker build ./authentication  -t  sreyo.jfrog.io/ns-docker-dev-local/login-docker:latest
         docker build ./welcome -t  sreyo.jfrog.io/ns-docker-dev-local/list-docker
-#         docker push sreyo.jfrog.io/ns-docker-dev-local/login-docker
-#         docker push sreyo.jfrog.io/ns-docker-dev-local/list-docker  
+        docker push sreyo.jfrog.io/ns-docker-dev-local/login-docker
+        docker push sreyo.jfrog.io/ns-docker-dev-local/list-docker  
+        docker rmi sreyo.jfrog.io/ns-docker-dev-local/login-docker
 
-    - name: Set up JFrog CLI
-      uses: jfrog/setup-jfrog-cli@v1
+#     - name: Set up JFrog CLI
+#       uses: jfrog/setup-jfrog-cli@v1
 
-    - name: Configure JFrog CLI 
-      run: |
-        jfrog config add --interactive=false --enc-password=false --url=https://sreyo.jfrog.io/ --basic-auth-only=true --user=$JFROG_USER --password=JFROG_PASSWORD
-    - name: Push Docker image to JFrog Artifactory
-      run: |
-        jfrog rt docker-push sreyo.jfrog.io/ns-docker-dev-local/login-docker
+#     - name: Configure JFrog CLI 
+#       run: |
+#         jfrog config add --interactive=false --enc-password=false --url=https://sreyo.jfrog.io/ --basic-auth-only=true --user=$JFROG_USER --password=JFROG_PASSWORD
+#     - name: Push Docker image to JFrog Artifactory
+#       run: |
+#         jfrog rt docker-push sreyo.jfrog.io/ns-docker-dev-local/login-docker
 
