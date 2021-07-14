@@ -5,6 +5,10 @@ on:
     branches:
       - main
       
+env:
+  JFROG_USER: ${{ secrets.JFROG_USER }}
+  JFROG_PASSWORD: ${{ secrets.JFROG_PASSWORD }}     
+      
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Push
@@ -16,9 +20,9 @@ jobs:
       
     # Login to Jfrog
     - name: Jfrog login
-      env:
-        JFROG_USER: ${{ secrets.JFROG_USER }}
-        JFROG_PASSWORD: ${{ secrets.JFROG_PASSWORD }}
+#       env:
+#         JFROG_USER: ${{ secrets.JFROG_USER }}
+#         JFROG_PASSWORD: ${{ secrets.JFROG_PASSWORD }}
       run: |
           docker login sreyo.jfrog.io -u $JFROG_USER -p $JFROG_PASSWORD
           #kubectl create secret generic jfrog-secret --from-file=.dockerconfigjson=.docker/config.json  --type=kubernetes.io/dockerconfigjson
@@ -29,5 +33,16 @@ jobs:
       run: |-
         docker build ./authentication  -t  sreyo.jfrog.io/ns-docker-dev-local/login-docker:latest
         docker build ./welcome -t  sreyo.jfrog.io/ns-docker-dev-local/list-docker
-        docker push sreyo.jfrog.io/ns-docker-dev-local/login-docker
-        docker push sreyo.jfrog.io/ns-docker-dev-local/list-docker  
+#         docker push sreyo.jfrog.io/ns-docker-dev-local/login-docker
+#         docker push sreyo.jfrog.io/ns-docker-dev-local/list-docker  
+
+    - name: Set up JFrog CLI
+      uses: jfrog/setup-jfrog-cli@v1
+
+    - name: Configure JFrog CLI 
+      run: |
+        jfrog config add --interactive=false --enc-password=true --artifactory-url=https://sreyo.jfrog.io/ --username=$JFROG_USER --password=JFROG_PASSWORD
+    - name: Push Docker image to JFrog Artifactory
+      run: |
+        jfrog rt docker-push sreyo.jfrog.io/ns-docker-dev-local/login-docker
+
